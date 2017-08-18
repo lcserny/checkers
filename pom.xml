@@ -30,7 +30,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>net.cserny.games.checkers.CheckersGame</mainClass>
+                            <mainClass>net.cserny.games.checkers.CheckersApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

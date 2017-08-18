@@ -1,35 +1,23 @@
 package net.cserny.games.checkers;
 
-import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+
+import static net.cserny.games.checkers.CheckersApplication.HEIGHT;
+import static net.cserny.games.checkers.CheckersApplication.TILE_SIZE;
+import static net.cserny.games.checkers.CheckersApplication.WIDTH;
 
 /**
  * Created by leonardo on 18.08.2017.
  */
-public class CheckersGame extends Application
+public class GameEngine
 {
-    public static final int TILE_SIZE = 100;
-    public static final int WIDTH = 8;
-    public static final int HEIGHT = 8;
-
     private Tile[][] board = new Tile[WIDTH][HEIGHT];
-
     private Group tilesGroup = new Group();
     private Group piecesGroup = new Group();
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    private Parent createContext() {
-        Pane root = new Pane();
-        root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
-        root.getChildren().addAll(tilesGroup, piecesGroup);
-
+    public Parent createContext() {
         for (int y = 0; y < WIDTH; y++) {
             for (int x = 0; x < HEIGHT; x++) {
                 Tile tile = new Tile((y + x) % 2 == 0, x, y);
@@ -52,10 +40,18 @@ public class CheckersGame extends Application
             }
         }
 
+        Pane root = new Pane();
+        root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        root.getChildren().addAll(tilesGroup, piecesGroup);
+
         return root;
     }
 
     private MoveResult tryMove(Piece piece, int newX, int newY) {
+        if ((newX < 0 || newX > WIDTH - 1) || (newY < 0 || newY > HEIGHT - 1)) {
+            return new MoveResult(MoveType.NONE);
+        }
+
         if (board[newX][newY].hasPiece() || (newX + newY) % 2 == 0) {
             return new MoveResult(MoveType.NONE);
         }
@@ -85,12 +81,10 @@ public class CheckersGame extends Application
         piece.setOnMouseReleased(event -> {
             int newX = toBoard(piece.getLayoutX());
             int newY = toBoard(piece.getLayoutY());
-
-            MoveResult result = tryMove(piece, newX, newY);
-
             int x0 = toBoard(piece.getOldX());
             int y0 = toBoard(piece.getOldY());
 
+            MoveResult result = tryMove(piece, newX, newY);
             switch (result.getType()) {
                 case NONE:
                     piece.abortMove();
@@ -113,13 +107,5 @@ public class CheckersGame extends Application
         });
 
         return piece;
-    }
-
-    public void start(Stage primaryStage) throws Exception {
-        Scene scene = new Scene(createContext());
-        primaryStage.setTitle("Checkers");
-        primaryStage.setScene(scene);
-        primaryStage.centerOnScreen();
-        primaryStage.show();
     }
 }

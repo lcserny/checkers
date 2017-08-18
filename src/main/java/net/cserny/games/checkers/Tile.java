@@ -10,15 +10,15 @@ public class Tile extends Rectangle
 {
     private Piece piece;
 
-    public boolean hasPiece() {
-        return piece != null;
+    public Tile(boolean light, int x, int y) {
+        setWidth(CheckersApplication.TILE_SIZE);
+        setHeight(CheckersApplication.TILE_SIZE);
+        relocate(x * CheckersApplication.TILE_SIZE, y * CheckersApplication.TILE_SIZE);
+        setFill(light ? Color.valueOf("feb") : Color.valueOf("582"));
     }
 
-    public Tile(boolean light, int x, int y) {
-        setWidth(CheckersGame.TILE_SIZE);
-        setHeight(CheckersGame.TILE_SIZE);
-        relocate(x * CheckersGame.TILE_SIZE, y * CheckersGame.TILE_SIZE);
-        setFill(light ? Color.valueOf("feb") : Color.valueOf("582"));
+    public boolean hasPiece() {
+        return piece != null;
     }
 
     public Piece getPiece() {
