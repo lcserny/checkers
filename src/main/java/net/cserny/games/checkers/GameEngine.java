@@ -18,8 +18,8 @@ public class GameEngine
     private Group piecesGroup = new Group();
 
     public Parent createContext() {
-        for (int y = 0; y < WIDTH; y++) {
-            for (int x = 0; x < HEIGHT; x++) {
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
                 Tile tile = new Tile((y + x) % 2 == 0, x, y);
                 board[x][y] = tile;
                 tilesGroup.getChildren().add(tile);
