@@ -18,7 +18,7 @@ public class CheckersApplication extends Application
     }
 
     public void start(Stage primaryStage) throws Exception {
-        Scene scene = new GameScene(new GameEngine());
+        Scene scene = new Scene(GameEngine.getInstance().createContext());
         primaryStage.setTitle("Checkers");
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();

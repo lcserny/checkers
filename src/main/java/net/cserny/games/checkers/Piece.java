@@ -1,8 +1,15 @@
 package net.cserny.games.checkers;
 
+import javafx.event.Event;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import static net.cserny.games.checkers.CheckersApplication.TILE_SIZE;
 
@@ -48,7 +55,7 @@ public class Piece extends StackPane
             relocate(event.getSceneX() - mouseX + currentX, event.getSceneY() - mouseY + currentY);
         });
 
-        GameEngine engine = getCurrentEngine();
+        GameEngine engine = GameEngine.getInstance();
         Tile[][] board = engine.getBoard();
         setOnMouseReleased(event -> {
             int startX = engine.toBoard(getCurrentX());
@@ -101,10 +108,5 @@ public class Piece extends StackPane
 
     public void abortMove() {
         relocate(currentX, currentY);
-    }
-
-    private GameEngine getCurrentEngine() {
-        GameScene scene = (GameScene) getScene();
-        return scene.getEngine();
     }
 }

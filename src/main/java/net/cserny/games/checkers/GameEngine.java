@@ -15,6 +15,16 @@ public class GameEngine
     private Group tilesGroup = new Group();
     private Group piecesGroup = new Group();
 
+    private GameEngine() { }
+
+    private static class GameEngineHolder {
+        private static final GameEngine INSTANCE = new GameEngine();
+    }
+
+    public static GameEngine getInstance() {
+        return GameEngineHolder.INSTANCE;
+    }
+
     public Parent createContext() {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
