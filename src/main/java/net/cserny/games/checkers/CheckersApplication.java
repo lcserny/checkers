@@ -9,22 +9,20 @@ import javafx.stage.Stage;
  */
 public class CheckersApplication extends Application
 {
-    private GameEngine engine = new GameEngine();
-
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     public void start(Stage primaryStage) throws Exception {
-        Scene scene = new Scene(engine.createContext());
+        Scene scene = new GameScene(new GameEngine());
         primaryStage.setTitle("Checkers");
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
         primaryStage.setResizable(false);
         primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

@@ -35,6 +35,10 @@ public class Piece extends StackPane
 
         getChildren().addAll(background, foreground);
 
+        attachEventHandlers();
+    }
+
+    private void attachEventHandlers() {
         setOnMousePressed(event -> {
             mouseX = event.getSceneX();
             mouseY = event.getSceneY();
@@ -42,6 +46,38 @@ public class Piece extends StackPane
 
         setOnMouseDragged(event -> {
             relocate(event.getSceneX() - mouseX + currentX, event.getSceneY() - mouseY + currentY);
+        });
+
+        GameEngine engine = getCurrentEngine();
+        Tile[][] board = engine.getBoard();
+        setOnMouseReleased(event -> {
+            int startX = engine.toBoard(getCurrentX());
+            int startY = engine.toBoard(getCurrentY());
+            int newX = engine.toBoard(getLayoutX());
+            int newY = engine.toBoard(getLayoutY());
+
+            MoveResult result = engine.tryMove(this, newX, newY);
+            switch (result.getType()) {
+                case NONE:
+                    abortMove();
+                    break;
+                case NORMAL:
+                    move(newX, newY);
+                    board[startX][startY].setPiece(null);
+                    board[newX][newY].setPiece(this);
+                    break;
+                case KILL:
+                    move(newX, newY);
+                    board[startX][startY].setPiece(null);
+                    board[newX][newY].setPiece(this);
+
+                    Piece otherPiece = result.getPiece();
+                    int otherPieceX = engine.toBoard(otherPiece.getCurrentX());
+                    int otherPieceY = engine.toBoard(otherPiece.getCurrentY());
+                    board[otherPieceX][otherPieceY].setPiece(null);
+                    engine.getPiecesGroup().getChildren().remove(otherPiece);
+                    break;
+            }
         });
     }
 
@@ -65,5 +101,10 @@ public class Piece extends StackPane
 
     public void abortMove() {
         relocate(currentX, currentY);
+    }
+
+    private GameEngine getCurrentEngine() {
+        GameScene scene = (GameScene) getScene();
+        return scene.getEngine();
     }
 }
