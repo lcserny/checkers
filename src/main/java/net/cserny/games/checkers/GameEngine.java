@@ -11,18 +11,31 @@ import static net.cserny.games.checkers.CheckersApplication.*;
  */
 public class GameEngine
 {
+    private static class GameEngineHolder
+    {
+        private static final GameEngine INSTANCE = new GameEngine();
+    }
+
+    private GameEngine() { }
+
+    public static GameEngine getInstance() {
+        return GameEngineHolder.INSTANCE;
+    }
+
     private Tile[][] board = new Tile[WIDTH][HEIGHT];
     private Group tilesGroup = new Group();
     private Group piecesGroup = new Group();
 
-    private GameEngine() { }
-
-    private static class GameEngineHolder {
-        private static final GameEngine INSTANCE = new GameEngine();
+    public Tile[][] getBoard() {
+        return board;
     }
 
-    public static GameEngine getInstance() {
-        return GameEngineHolder.INSTANCE;
+    public Group getTilesGroup() {
+        return tilesGroup;
+    }
+
+    public Group getPiecesGroup() {
+        return piecesGroup;
     }
 
     public Parent createContext() {
@@ -83,17 +96,5 @@ public class GameEngine
 
     public int toBoard(double pixel) {
         return (int) (pixel + TILE_SIZE / 2) / TILE_SIZE;
-    }
-
-    public Tile[][] getBoard() {
-        return board;
-    }
-
-    public Group getTilesGroup() {
-        return tilesGroup;
-    }
-
-    public Group getPiecesGroup() {
-        return piecesGroup;
     }
 }
