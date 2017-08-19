@@ -55,9 +55,10 @@ public class Piece extends StackPane
             relocate(event.getSceneX() - mouseX + currentX, event.getSceneY() - mouseY + currentY);
         });
 
-        GameEngine engine = GameEngine.getInstance();
-        Tile[][] board = engine.getBoard();
         setOnMouseReleased(event -> {
+            GameEngine engine = GameEngine.getInstance();
+            Tile[][] board = engine.getBoard();
+
             int startX = engine.toBoard(getCurrentX());
             int startY = engine.toBoard(getCurrentY());
             int newX = engine.toBoard(getLayoutX());
