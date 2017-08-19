@@ -56,16 +56,17 @@ public class GameEngine
             return new MoveResult(MoveType.NONE);
         }
 
-        int x0 = toBoard(piece.getOldX());
-        int y0 = toBoard(piece.getOldY());
+        int startX = toBoard(piece.getCurrentX());
+        int startY = toBoard(piece.getCurrentY());
 
-        if (Math.abs(newX - x0) == 1 && newY - y0 == piece.getType().moveDirection) {
+        if (Math.abs(newX - startX) == 1 && newY - startY == piece.getType().moveDirection) {
             return new MoveResult(MoveType.NORMAL);
-        } else if (Math.abs(newX - x0) == 2 && newY - y0 == piece.getType().moveDirection * 2) {
-            int x1 = x0 + (newX - x0) / 2;
-            int y1 = y0 + (newY - y0) / 2;
-            if (board[x1][y1].hasPiece() && board[x1][y1].getPiece().getType() != piece.getType()) {
-                return new MoveResult(MoveType.KILL, board[x1][y1].getPiece());
+        } else if (Math.abs(newX - startX) == 2 && newY - startY == piece.getType().moveDirection * 2) {
+            int betweenX = startX + (newX - startX) / 2;
+            int betweenY = startY + (newY - startY) / 2;
+            Tile betweenTile = board[betweenX][betweenY];
+            if (betweenTile.hasPiece() && betweenTile.getPiece().getType() != piece.getType()) {
+                return new MoveResult(MoveType.KILL, betweenTile.getPiece());
             }
         }
 
@@ -79,10 +80,10 @@ public class GameEngine
     private Piece makePiece(PieceType type, int x, int y) {
         Piece piece = new Piece(type, x, y);
         piece.setOnMouseReleased(event -> {
+            int startX = toBoard(piece.getCurrentX());
+            int startY = toBoard(piece.getCurrentY());
             int newX = toBoard(piece.getLayoutX());
             int newY = toBoard(piece.getLayoutY());
-            int x0 = toBoard(piece.getOldX());
-            int y0 = toBoard(piece.getOldY());
 
             MoveResult result = tryMove(piece, newX, newY);
             switch (result.getType()) {
@@ -91,16 +92,18 @@ public class GameEngine
                     break;
                 case NORMAL:
                     piece.move(newX, newY);
-                    board[x0][y0].setPiece(null);
+                    board[startX][startY].setPiece(null);
                     board[newX][newY].setPiece(piece);
                     break;
                 case KILL:
                     piece.move(newX, newY);
-                    board[x0][y0].setPiece(null);
+                    board[startX][startY].setPiece(null);
                     board[newX][newY].setPiece(piece);
 
                     Piece otherPiece = result.getPiece();
-                    board[toBoard(otherPiece.getOldX())][toBoard(otherPiece.getOldY())].setPiece(null);
+                    int otherPieceX = toBoard(otherPiece.getCurrentX());
+                    int otherPieceY = toBoard(otherPiece.getCurrentY());
+                    board[otherPieceX][otherPieceY].setPiece(null);
                     piecesGroup.getChildren().remove(otherPiece);
                     break;
             }

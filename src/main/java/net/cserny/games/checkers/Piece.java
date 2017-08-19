@@ -13,7 +13,7 @@ public class Piece extends StackPane
 {
     private PieceType type;
     private double mouseX, mouseY;
-    private double oldX, oldY;
+    private double currentX, currentY;
 
     public Piece(PieceType type, int x, int y) {
         this.type = type;
@@ -41,7 +41,7 @@ public class Piece extends StackPane
         });
 
         setOnMouseDragged(event -> {
-            relocate(event.getSceneX() - mouseX + oldX, event.getSceneY() - mouseY + oldY);
+            relocate(event.getSceneX() - mouseX + currentX, event.getSceneY() - mouseY + currentY);
         });
     }
 
@@ -49,21 +49,21 @@ public class Piece extends StackPane
         return type;
     }
 
-    public double getOldX() {
-        return oldX;
+    public double getCurrentX() {
+        return currentX;
     }
 
-    public double getOldY() {
-        return oldY;
+    public double getCurrentY() {
+        return currentY;
     }
 
     public void move(int x, int y) {
-        oldX = x * TILE_SIZE;
-        oldY = y * TILE_SIZE;
-        relocate(oldX, oldY);
+        currentX = x * TILE_SIZE;
+        currentY = y * TILE_SIZE;
+        relocate(currentX, currentY);
     }
 
     public void abortMove() {
-        relocate(oldX, oldY);
+        relocate(currentX, currentY);
     }
 }
